@@ -19,7 +19,7 @@ for KEY in keys_list:
 
     eth_quantity_to_bridge = 1  # на все акки полетит по 1 эфиру - можно зарандомить сумму в диапазоне раскомментив строку ниже и закомментив эту
 
-    # eth_quantity_to_bridge = random.uniform(0.1,1) # рандомное количество эфира для бриджа в диапазоне от 0.1 до 1
+    # eth_quantity_to_bridge = random.uniform(0.1, 1) # рандомное количество эфира для бриджа в диапазоне от 0.1 до 1
 
     eth_quantity = w3.to_wei(eth_quantity_to_bridge, 'ether')
 
