@@ -1,6 +1,7 @@
 from web3 import Web3
 import random
 import json
+import time
 
 with open("privates.txt", "r") as f:
     keys_list = [row.strip() for row in f if row.strip()]
@@ -10,7 +11,7 @@ w3 = Web3(Web3.HTTPProvider('https://rpc.ankr.com/eth_goerli'))
 CONTRACT_ABI = json.load(open('abi_linea.json'))
 CONTRACT_ADDRESS = w3.to_checksum_address('0x70bad09280fd342d02fe64119779bc1f0791bac2')
 
-zksync_contract = w3.eth.contract(address=CONTRACT_ADDRESS, abi=CONTRACT_ABI)
+linea_contract = w3.eth.contract(address=CONTRACT_ADDRESS, abi=CONTRACT_ABI)
 
 for KEY in keys_list:
     account = w3.eth.account.from_key(KEY)
@@ -19,7 +20,7 @@ for KEY in keys_list:
 
     eth_quantity_to_bridge = 1  # на все акки полетит по 1 эфиру - можно зарандомить сумму в диапазоне раскомментив строку ниже и закомментив эту
 
-    # eth_quantity_to_bridge = random.uniform(0.1, 1) # рандомное количество эфира для бриджа в диапазоне от 0.1 до 1
+    # eth_quantity_to_bridge = random.uniform(0.1,1) # рандомное количество эфира для бриджа в диапазоне от 0.1 до 1
 
     eth_quantity = w3.to_wei(eth_quantity_to_bridge, 'ether')
 
@@ -28,7 +29,7 @@ for KEY in keys_list:
     calldata = b''
     fee = 1000000000000000
 
-    tx = zksync_contract.functions.sendMessage(
+    tx = linea_contract.functions.sendMessage(
         address,
         fee,
         calldata,
@@ -43,3 +44,4 @@ for KEY in keys_list:
     signed_transaction = w3.eth.account.sign_transaction(tx, KEY)
     txn = w3.eth.send_raw_transaction(signed_transaction.rawTransaction)
     print(f"Transaction: https://goerli.etherscan.io/tx/{txn.hex()}")
+    time.sleep(15)
